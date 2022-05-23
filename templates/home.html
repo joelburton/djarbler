@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="row">
+
+    <aside class="col-md-4 col-lg-3 col-sm-12" id="home-aside">
+      <div class="card user-card">
+        <div>
+          <div class="image-wrapper">
+            <img src="{{ request.user.header_image.url }}" alt=""
+                 class="card-hero">
+          </div>
+          <a href="/users/{{ request.user.id }}" class="card-link">
+            <img src="{{ request.user.image.url }}"
+                 alt="Image for {{ request.user.username }}"
+                 class="card-image">
+            <p>@{{ request.user.username }}</p>
+          </a>
+          <ul class="user-stats nav nav-pills">
+            <li class="stat">
+              <p class="small">Messages</p>
+              <h4>
+                <a href="/users/{{ request.user.id }}">{{ request.user.messages.count() }}</a>
+              </h4>
+            </li>
+            <li class="stat">
+              <p class="small">Following</p>
+              <h4>
+                <a href="/users/{{ request.user.id }}/following">{{ request.user.following.count() }}</a>
+              </h4>
+            </li>
+            <li class="stat">
+              <p class="small">Followers</p>
+              <h4>
+                <a href="/users/{{ request.user.id }}/followers">{{ request.user.followers.count() }}</a>
+              </h4>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </aside>
+
+    <div class="col-lg-6 col-md-8 col-sm-12">
+      <ul class="list-group" id="messages">
+        {% for msg in warbles %}
+          <li class="list-group-item">
+            <a href="/messages/{{ msg.id }}" class="message-link"></a>
+            <a href="/users/{{ msg.user.id }}">
+              <img src="{{ msg.user.image.url }}" alt="" class="timeline-image">
+            </a>
+            <div class="message-area">
+              <a href="/users/{{ msg.user.id }}">@{{ msg.user.username }}</a>
+              <span
+                  class="text-muted">{{ msg.timestamp.strftime('%d %B %Y') }}</span>
+              <p class="mt-2">{{ msg.text }}</p>
+            </div>
+            {% if msg.user_id != request.user.id %}
+              <form method="POST" action="/messages/{{ msg.id }}/like/"
+                    class="messages-like pt-1 pe-1">
+                <input type="hidden"
+                       name="csrfmiddlewaretoken"
+                       value="{{ csrf_token }}">
+                <button class="
+                  btn
+                  btn-sm
+                  {{ 'btn-primary' if request.user.liked_messages.contains(msg) else 'btn-secondary' }}"
+                >
+                  <i class="fa fa-thumbs-up"></i>
+                </button>
+              </form>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
+
+  </div>
+{% endblock %}

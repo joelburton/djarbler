@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+  <div class="row justify-content-md-center">
+    <div class="col-md-4">
+      <h2 class="join-message">Edit Your Profile.</h2>
+      <form method="POST" id="user_form">
+        <input type="hidden"
+               name="csrfmiddlewaretoken"
+               value="{{ csrf_token }}">
+
+        {% for field in form %}
+          <div class="form-controlx">
+            {% for err in field.errors %}
+              <p class="text-danger">{{ err }}</p>
+            {% endfor %}
+            {{ field.as_widget(
+                attrs={"class": "form-control", "placeholder": field.label}) }}
+          </div>
+        {% endfor %}
+
+        <div class="edit-btn-area">
+          <button class="btn btn-success">Edit this user!</button>
+          <a href="/users/{{ user_id }}" class="btn btn-outline-secondary">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+{% endblock %}
