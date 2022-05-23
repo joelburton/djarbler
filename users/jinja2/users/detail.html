@@ -11,31 +11,45 @@
       <div class="row justify-content-end">
         <div class="col-9">
           <ul class="user-stats nav nav-pills">
+
             <li class="stat">
               <p class="small">Messages</p>
               <h4>
-                <a href="/users/{{ user.id }}/">{{ user.messages.count() }}</a>
+                <a href="/users/{{ user.id }}/">
+                  {{ user.messages.count() }}
+                </a>
               </h4>
             </li>
+
             <li class="stat">
               <p class="small">Following</p>
               <h4>
-                <a href="/users/{{ user.id }}/following/">{{ user.following.count() }}</a>
+                <a href="/users/{{ user.id }}/following/">
+                  {{ user.following.count() }}
+                </a>
               </h4>
             </li>
+
             <li class="stat">
               <p class="small">Followers</p>
               <h4>
-                <a href="/users/{{ user.id }}/followers/">{{ user.followers.count() }}</a>
+                <a href="/users/{{ user.id }}/followers/">
+                  {{ user.followers.count() }}
+                </a>
               </h4>
             </li>
+
             <li class="stat">
               <p class="small">Likes</p>
               <h4>
-                <a href="/users/{{ user.id }}/likes/">{{ user.liked_messages.count() }}</a>
+                <a href="/users/{{ user.id }}/likes/">
+                  {{ user.liked_messages.count() }}
+                </a>
               </h4>
             </li>
-            <div class="ms-auto">
+
+            <li class="ms-auto">
+
               {% if request.user == user %}
                 <a href="/users/profile/" class="btn btn-outline-secondary">Edit
                   Profile</a>
@@ -46,6 +60,7 @@
                   <button class="btn btn-outline-danger ms-2">Delete Profile
                   </button>
                 </form>
+
               {% elif request.user %}
                 {% if request.user.is_following(user) %}
                   <form method="POST"
@@ -55,6 +70,7 @@
                            value="{{ csrf_token }}">
                     <button class="btn btn-primary">Unfollow</button>
                   </form>
+
                 {% else %}
                   <form method="POST" action="/users/follow/{{ user.id }}/">
                     <input type="hidden"
@@ -64,7 +80,8 @@
                   </form>
                 {% endif %}
               {% endif %}
-            </div>
+            </li>
+
           </ul>
         </div>
       </div>
